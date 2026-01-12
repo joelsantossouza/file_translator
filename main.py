@@ -9,7 +9,7 @@ def main() -> None:
     arguments: ParseArgs = ParseArgs(sys.argv)
 
     translate_file: FileTranslator = None
-    if arguments.type == ".pdf":
+    if arguments.filetype == ".pdf":
         translate_file = PdfTranslator(arguments.translator)
 
     translate_file.translate(arguments.dst_path, arguments.src_path)

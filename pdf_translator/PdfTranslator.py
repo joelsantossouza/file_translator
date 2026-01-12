@@ -12,6 +12,23 @@ IMAGE_BLOCK: int = 1
 class PdfTranslator(FileTranslator):
     """Translate pdf files"""
 
+    @staticmethod
+    def safe_insert_textbox(page: Page, rect: Rect, text: str, fontname: str,
+                            fontsize: int, align: int, scales: list) -> bool:
+        if not fontname.lower().startswith(("helv", "times", "cour")):
+            fontname = "helv"
+        for scale in scales:
+            result: int = page.insert_textbox(
+                rect,
+                text,
+                fontname=fontname,
+                fontsize=fontsize * scale,
+                align=align
+            )
+            if result >= 0:
+                return True
+        return False
+
     def translate_text_block(self, dst_page: Page, text_block: dict) -> None:
         for line in text_block["lines"]:
             for span in line["spans"]:
@@ -22,12 +39,14 @@ class PdfTranslator(FileTranslator):
                 if not text.strip():
                     continue
                 translated_text: str = self._FileTranslator__translator(text)
-                dst_page.insert_textbox(
+                self.safe_insert_textbox(
+                    dst_page,
                     Rect(x0, y0, x1, y1),
                     translated_text,
-                    fontname=fontname,
-                    fontsize=fontsize,
-                    align=fitz.TEXT_ALIGN_LEFT
+                    fontname,
+                    fontsize,
+                    fitz.TEXT_ALIGN_LEFT,
+                    [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4]
                 )
 
     @staticmethod

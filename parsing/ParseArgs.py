@@ -42,9 +42,12 @@ class ParseArgs:
     def get_flag_translator(self, flag: Any, lst: list[Any],
                             crucial: Optional[bool] = False) -> callable:
         translator: str = self.get_flag_value(flag, lst, crucial)
-        if translator.lower == "googletranslator":
+        if translator.lower() == "googletranslator":
             return GoogleTranslator(
                 source=self.src_lang,
                 target=self.dst_lang
             ).tranlate
+        if crucial:
+            print("ERROR: You must provide a valid translator!")
+            exit(1)
         return None

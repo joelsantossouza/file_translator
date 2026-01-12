@@ -13,7 +13,7 @@ class PdfTranslator(FileTranslator):
     """Translate pdf files"""
 
     @staticmethod
-    def copy_text_block(self, dst_page: Page, text_block: tuple) -> None:
+    def copy_text_block(self, dst_page: Page, text_block: dict) -> None:
         for line in text_block["lines"]:
             for span in line["spans"]:
                 x0, y0, x1, y1 = span["bbox"]
@@ -33,14 +33,13 @@ class PdfTranslator(FileTranslator):
 
     @staticmethod
     def copy_image_block(dst_page: Page, src_page: Page,
-                         image_block: tuple) -> None:
-        for image in image_block["image"]:
-            img_rect: Rect = Rect(image_block["bbox"])
-            pixmap: Pixmap = src_page.get_pixmap(clip=img_rect)
-            dst_page.insert_image(img_rect, pixmap=pixmap)
+                         image_block: dict) -> None:
+        img_rect: Rect = Rect(image_block["bbox"])
+        pixmap: Pixmap = src_page.get_pixmap(clip=img_rect)
+        dst_page.insert_image(img_rect, pixmap=pixmap)
 
     def translate_page(self, dst_page: Page, src_page: Page) -> None:
-        blocks: tuple = src_page.get_text("dict")["blocks"]
+        blocks: dict = src_page.get_text("dict")["blocks"]
         for block in blocks:
             if block["type"] == TEXT_BLOCK:
                 self.copy_text_block(dst_page, block)

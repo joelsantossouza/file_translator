@@ -21,7 +21,7 @@ class PdfTranslator(FileTranslator):
                 fontsize: int = span["size"]
                 if not text.strip():
                     continue
-                translated_text: str = self.__translator(text)
+                translated_text: str = self._FileTranslator__translator(text)
                 dst_page.insert_textbox(
                     Rect(x0, y0, x1, y1),
                     translated_text,

@@ -12,8 +12,7 @@ IMAGE_BLOCK: int = 1
 class PdfTranslator(FileTranslator):
     """Translate pdf files"""
 
-    @staticmethod
-    def copy_text_block(self, dst_page: Page, text_block: dict) -> None:
+    def translate_text_block(self, dst_page: Page, text_block: dict) -> None:
         for line in text_block["lines"]:
             for span in line["spans"]:
                 x0, y0, x1, y1 = span["bbox"]
@@ -42,7 +41,7 @@ class PdfTranslator(FileTranslator):
         blocks: dict = src_page.get_text("dict")["blocks"]
         for block in blocks:
             if block["type"] == TEXT_BLOCK:
-                self.copy_text_block(dst_page, block)
+                self.translate_text_block(dst_page, block)
             else:
                 self.copy_image_block(dst_page, src_page, block)
 

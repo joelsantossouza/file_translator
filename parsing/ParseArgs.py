@@ -46,7 +46,7 @@ class ParseArgs:
             return GoogleTranslator(
                 source=self.src_lang,
                 target=self.dst_lang
-            ).tranlate
+            ).translate
         if crucial:
             print("ERROR: You must provide a valid translator!")
             exit(1)

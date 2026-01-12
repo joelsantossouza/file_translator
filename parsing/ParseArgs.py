@@ -8,6 +8,11 @@ class ParseArgs:
         self.src_lang: str = self.get_flag_value("--src-lang", args)
         self.dst_lang: str = self.get_flag_value("--dst-lang", args)
 
+        self.translator: callable = GoogleTranslator(
+            source=src_lang,
+            target=dst_lang
+        )
+
     @staticmethod
     def get_flag_value(flag: any, lst: list) -> any:
         for i in range(len(lst) - 1):

@@ -66,16 +66,18 @@ class PdfTranslator(FileTranslator):
 
     def translate(self, dst_path: str, src_path: str) -> None:
         src_pdf: Document = open_pdf(src_path)
-        dst_pdf: Document = open_pdf()
+        self.files[dst_path] = open_pdf()
+        for i, page in enumerate(src_pdf):
+            new_page: Page = self.files[dst_path].new_page(
+                width=page.rect.width,
+                height=page.rect.height
+            )
+            self.translate_page(new_page, page)
+            print(f"Done {i + 1} pages translated from {src_pdf.page_count}")
+
+    def save(self, dst_path: str) -> bool:
         try:
-            for i, page in enumerate(src_pdf):
-                new_page: Page = dst_pdf.new_page(
-                    width=page.rect.width,
-                    height=page.rect.height
-                )
-                self.translate_page(new_page, page)
-                print(
-                    f"Done {i + 1} pages translated from {src_pdf.page_count}")
-        except Exception as e:
-            print(e)
-        dst_pdf.save(dst_path)
+            self.files[dst_path].save(dst_path)
+            return True
+        except Exception:
+            return False

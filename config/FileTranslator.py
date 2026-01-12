@@ -1,7 +1,7 @@
-from abs import ABS, abstractmethod
+from abc import ABC, abstractmethod
 
 
-class FileTranslator(ABS):
+class FileTranslator(ABC):
     """Abstract base class for file translations"""
 
     def __init__(self, translator: callable) -> None:
